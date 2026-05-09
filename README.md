@@ -1,8 +1,24 @@
 # Proyecto AICV — Sistema de Semáforos Inteligentes
 
+# Desarrolladores:
+Luis Eduardo Montiel Urias
+Martha Daniela Durazo Arvizu
+Jesús Jean Carlo Mendoza Bernal
+Oscar Ricardo Samano Zavala
+
+# Profesor:
+M.I.A. Rocío Jaqueline Becerra Urquídez
+
+# Descripción:
+
 Agente inteligente que decide el estado de semáforos en tiempo real según sensores físicos (ultrasónicos, magnéticos, cámara) y reglas en Prolog. Controla actuadores (LEDs RGB, OLED, buzzer) vía Arduino.
 
-## Arquitectura
+## Funcionamiento:
+
+Este agente usa arquitecturas fisicas sensoriales (ultrasónicos, magnéticos, cámara) junto a un motor de interferencia logica en prolog para tomar decisiones en tiempo real, optimizando el flujo y priorizando el transporte público o de 
+carga pesada segun las condiciones del entorno.
+
+## Arquitectura:
 
 ```
 Sensores Arduino ──► sensores.py ──► MySQL ◄── main.py ──► Prolog (reglas)
