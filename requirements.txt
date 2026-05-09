@@ -1,0 +1,8 @@
+pyswip>=0.3
+mysql-connector-python>=8.0
+pyserial>=3.5
+opencv-python>=4.8
+python-dotenv>=1.0
+numpy
+ultralytics>=8.0
+

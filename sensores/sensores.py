@@ -6,6 +6,8 @@ Uso:
     python sensores.py
 """
 
+import os
+import sys
 import serial
 import time
 import mysql.connector
@@ -14,12 +16,16 @@ from serial.tools import list_ports
 from mysql.connector import errorcode
 from datetime import datetime
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import DB_CONFIG, SERIAL_SENSORES
+
+
 class LectorSerial:
     """Lee datos de puerto COM (Arduino real)"""
-    
-    def __init__(self, puerto='COM3', baudrate=9600):
-        self.puerto = puerto
-        self.baudrate = baudrate
+
+    def __init__(self, puerto=None, baudrate=None):
+        self.puerto = puerto or SERIAL_SENSORES["puerto"]
+        self.baudrate = baudrate or SERIAL_SENSORES["baudrate"]
         self.serial = None
     
     def conectar(self):
@@ -64,18 +70,20 @@ class LectorSerial:
 class GestorBaseDatos:
     """Gestiona conexión y operaciones con BD MySQL"""
     
-    def __init__(self, host='localhost', user='root', password='', database='sistema_vial_ia'):
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
+    def __init__(self, host=None, port=None, user=None, password=None, database=None):
+        self.host = host or DB_CONFIG["host"]
+        self.port = port or DB_CONFIG["port"]
+        self.user = user or DB_CONFIG["user"]
+        self.password = password if password is not None else DB_CONFIG["password"]
+        self.database = database or DB_CONFIG["database"]
         self.conexion = None
-    
+
     def conectar(self):
         """Conecta a la base de datos"""
         try:
             self.conexion = mysql.connector.connect(
                 host=self.host,
+                port=self.port,
                 user=self.user,
                 password=self.password,
                 database=self.database
@@ -213,8 +221,8 @@ def main():
         description="Lee sensores y guarda en BD",
         epilog="Ejemplo: python sensores.py"
     )
-    parser.add_argument('-p', '--puerto', default='COM3',
-                       help='Puerto COM (serial, default: COM3)')
+    parser.add_argument('-p', '--puerto', default=SERIAL_SENSORES["puerto"],
+                       help=f'Puerto COM (serial, default: {SERIAL_SENSORES["puerto"]})')
     parser.add_argument('--batch', type=int, default=50,
                        help='Tamaño de batch para inserts (default: 50)')
     
